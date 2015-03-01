@@ -5,6 +5,7 @@
 5. AccountDto
     - ModelMapper
     - hateoas
+    - validation
 6. AccountService
     - 입력
     - 조회
