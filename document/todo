@@ -1,0 +1,16 @@
+1. create project (spring boot)
+2. AccountController
+3. Account
+4. AccountRepository (spring data jpa)
+5. AccountDto
+    - ModelMapper
+    - hateoas
+6. AccountService
+    - 입력
+    - 조회
+7. AccountControllerTest (spring test)
+8. RestControllerAdvice
+    - 중복 처리
+9. Security Config (spring security)
+10. SecurityConfigTest
+11. actuator
