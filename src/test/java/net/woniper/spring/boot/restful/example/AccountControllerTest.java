@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -117,6 +118,24 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.accountId",  is(newAccount.getAccountId().intValue())))
                 .andExpect(jsonPath("$.username",   is(newAccount.getUsername())))
                 .andExpect(jsonPath("$.name",       is(newAccount.getName())));
+    }
+
+    @Test
+    public void test_Account_Username_중복체크() throws Exception {
+        // given
+        Account newAccount = accountService.newAccount(modelMapper.map(account, AccountDto.Request.class));
+
+        // when
+        ResultActions result = mockMvc.perform(post("/accounts")
+                .contentType(mediaType)
+                .content(objectMapper.writeValueAsBytes(newAccount)));
+
+        // then
+        result.andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code", is(HttpStatus.CONFLICT.value())))
+                .andExpect(jsonPath("$.message", is(HttpStatus.CONFLICT.getReasonPhrase())));
+
     }
 
     @Test

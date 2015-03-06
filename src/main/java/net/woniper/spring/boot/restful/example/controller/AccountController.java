@@ -1,6 +1,7 @@
 package net.woniper.spring.boot.restful.example.controller;
 
 import net.woniper.spring.boot.restful.example.domain.Account;
+import net.woniper.spring.boot.restful.example.exception.support.DuplicationUsernameException;
 import net.woniper.spring.boot.restful.example.service.AccountService;
 import net.woniper.spring.boot.restful.example.support.AccountDto;
 import org.modelmapper.ModelMapper;
@@ -41,6 +42,10 @@ public class AccountController {
 
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<> (bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+
+        if(accountService.isDuplicationUsername(accountRequest.getUsername())) {
+            throw new DuplicationUsernameException(accountRequest.getUsername());
         }
 
         Account account = accountService.newAccount(accountRequest);

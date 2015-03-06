@@ -31,4 +31,8 @@ public class AccountService {
     public Account getAccount(String username) {
         return accountRepository.findByUsername(username);
     }
+
+    public boolean isDuplicationUsername(String username) {
+        return accountRepository.findByUsername(username) != null;
+    }
 }
