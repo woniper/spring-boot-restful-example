@@ -14,6 +14,8 @@ public class AccountDto {
 
     @NotNull @Size(min = 5) private String username;
     @NotNull @Size(min = 5) private String name;
+    private boolean admin;
+    private boolean enable = true;
 
     @Data
     public static class Request extends AccountDto {

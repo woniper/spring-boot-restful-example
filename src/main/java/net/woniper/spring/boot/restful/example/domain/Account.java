@@ -22,6 +22,10 @@ public class Account {
 
     private String name;
 
+    private boolean admin;
+
+    private boolean enable = true;
+
     @Temporal(TemporalType.DATE)
     private Date createDate = new Date();
 

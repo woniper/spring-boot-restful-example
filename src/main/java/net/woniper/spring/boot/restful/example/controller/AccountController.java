@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 /**
  * Created by woniper on 15. 3. 1..
@@ -25,6 +26,12 @@ public class AccountController {
     @RequestMapping(value = "/account/{accountId}", method = RequestMethod.GET)
     public ResponseEntity<?> getAccount(@PathVariable("accountId") Long accountId) {
         Account account = accountService.getAccount(accountId);
+        return new ResponseEntity<>(modelMapper.map(account, AccountDto.Response.class), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+    public ResponseEntity<?> getAccount(Principal principal) {
+        Account account = accountService.getAccount(principal.getName());
         return new ResponseEntity<>(modelMapper.map(account, AccountDto.Response.class), HttpStatus.OK);
     }
 
