@@ -6,6 +6,7 @@ import net.woniper.spring.boot.restful.example.service.AccountService;
 import net.woniper.spring.boot.restful.example.support.AccountDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  * Created by woniper on 15. 3. 1..
@@ -49,7 +54,14 @@ public class AccountController {
         }
 
         Account account = accountService.newAccount(accountRequest);
-        return new ResponseEntity<>(modelMapper.map(account, AccountDto.Response.class), HttpStatus.CREATED);
+        AccountDto.Response responseAccount = modelMapper.map(account, AccountDto.Response.class);
+
+        // hateoas
+        List<Link> linkList = new ArrayList<>();
+        linkList.add(linkTo(AccountController.class).slash("accounts").withRel("principal"));
+        linkList.add(linkTo(AccountController.class).slash("account").slash(account.getAccountId().intValue()).withRel("accountId"));
+        responseAccount.add(linkList);
+        return new ResponseEntity<>(responseAccount, HttpStatus.CREATED);
     }
 
 }
